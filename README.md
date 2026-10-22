@@ -1,32 +1,29 @@
-# Threadbase - Upload UI Starter
+# Threadbase - Avatar Upload
 
-Starter repo for **LU 4.10 - React Upload UI**.
+A React avatar uploader with drag-and-drop, client-side image checks, a local
+preview, and upload progress. The Express server accepts the `avatar` form
+field and returns a URL for the uploaded image.
 
-The server (multer upload endpoint from 4.9) is complete. The client has an `AvatarUploader.jsx` with a plain file input and a stub upload. Your job: add drag-and-drop, client validation, a local preview, and an Axios upload with a progress bar.
-
-## Setup
+## Run locally
 
 ```bash
-# Terminal 1 - the upload server (do NOT edit)
-cd server && cp .env.example .env && npm install && npm start   # http://localhost:3001
+# Terminal 1 - upload server
+cd server && cp .env.example .env && npm install && npm start
 
-# Terminal 2 - the React app
+# Terminal 2 - React app
 cd client && cp .env.development.example .env.development && npm install && npm run dev
 ```
 
-## The file to edit
+The server runs at `http://localhost:3001`. Vite prints the client URL when it
+starts.
 
-`client/src/components/AvatarUploader.jsx` - follow the TODO comments:
+## Upload behavior
 
-1. **Drag-and-drop** - `onDragOver` / `onDragLeave` / `onDrop`, `e.preventDefault()` on dragOver and drop, read `e.dataTransfer.files[0]`, toggle `isDragging`.
-2. **Validation** - check `file.type` and `file.size` (5MB) before uploading.
-3. **Preview** - `URL.createObjectURL(file)` as `<img src>`, revoke in a `useEffect` cleanup.
-4. **Upload** - `FormData` with field `avatar`, Axios `onUploadProgress`, no manual `Content-Type`.
-
-Do **not** edit the `server/` folder.
-
-## Test your work
-
-Drag an image → previews (does not open in a new tab). Click Upload → progress bar fills 0 to 100, server returns a URL. Drop a PDF → client error, no upload. Network tab → the request `Content-Type` shows `multipart/form-data; boundary=...` (browser-set).
-
-CSS classes provided in `index.css`: `drop-zone`, `dragging`, `preview`, `bar`, `fill`, `error`.
+- Drop an image onto the upload area or choose one from your device.
+- JPEG, PNG, WebP, and GIF images up to 5 MB are accepted.
+- A local preview is shown before upload. The preview URL is released when the
+  selected image changes or the page is closed.
+- Uploading sends the image as multipart form data in the `avatar` field and
+  displays transfer progress. The server's response includes a link to the
+  uploaded image.
+- Unsupported file types and oversized images are rejected before upload.
